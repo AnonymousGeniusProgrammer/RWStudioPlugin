@@ -1,0 +1,27 @@
+{
+    "version": 2,
+    "configurePresets": [
+        {
+            "name": "msvc17_x64_relwithdebinfo",
+            "displayName": "Visual Studio Community 2017 Release - amd64",
+            "description": "Using compilers for Visual Studio 15 2017 (x64 architecture)",
+            "generator": "Visual Studio 15 2017",
+            "toolset": "host=x64",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "RelWithDebInfo",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "msvc17_x64_relwithdebinfo",
+            "description": "",
+            "displayName": "",
+            "configurePreset": "msvc17_x64_relwithdebinfo",
+            "configuration": "RelWithDebInfo"
+        }
+    ]
+}

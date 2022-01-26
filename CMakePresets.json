@@ -1,17 +1,24 @@
 {
-    "version": 2,
+    "version": 3,
     "configurePresets": [
         {
             "name": "msvc17_x64_relwithdebinfo",
             "displayName": "Visual Studio Community 2017 Release - amd64",
             "description": "Using compilers for Visual Studio 15 2017 (x64 architecture)",
+            "toolchainFile": "",
             "generator": "Visual Studio 15 2017",
             "toolset": "host=x64",
             "architecture": "x64",
             "binaryDir": "${sourceDir}/build/${presetName}",
             "cacheVariables": {
+                "CMAKE_CXX_FLAGS":"/MP",
+                "CMAKE_C_COMPILER":"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\bin\\Hostx64\\x64\\cl.exe",
+                "CMAKE_CXX_COMPILER":"C:\\Program Files (x86)\\Microsoft Visual Studio\\2017\\Community\\VC\\Tools\\MSVC\\14.16.27023\\bin\\Hostx64\\x64\\cl.exe",
                 "CMAKE_BUILD_TYPE": "RelWithDebInfo",
-                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}"
+                "CMAKE_PREFIX_PATH": "C:\\Qt\\5.12.2\\msvc2017_64\\lib\\cmake",
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "RW_ROOT":"C:\\Dev\\SourceCodes\\RobWork\\RobWork",
+                "RWS_ROOT":"C:\\Dev\\SourceCodes\\RobWork\\RobWorkStudio"
             }
         }
     ],
@@ -19,9 +26,12 @@
         {
             "name": "msvc17_x64_relwithdebinfo",
             "description": "",
-            "displayName": "",
+            "displayName": "msvc17_x64_relwithdebinfo",
             "configurePreset": "msvc17_x64_relwithdebinfo",
-            "configuration": "RelWithDebInfo"
+            "configuration": "RelWithDebInfo",
+            "targets":["ALL_BUILD"],
+            "verbose": true,
+            "nativeToolOptions": ["/m"]
         }
     ]
 }

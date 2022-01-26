@@ -26,8 +26,8 @@ set(CMAKE_VERBOSE_MAKEFILE True)
 IF(WIN32)
   # On Windows platforms, the RW/RWS installers create the necessary environment variables
   IF(DEFINED RW_ROOT AND DEFINED RWS_ROOT)
-    SET(RW_ROOT "$ENV{RW_ROOT}")
-    SET(RWSTUDIO_ROOT "$ENV{RWS_ROOT}")
+    # SET(RW_ROOT "$ENV{RW_ROOT}")
+    SET(RWSTUDIO_ROOT "${RWS_ROOT}")
     cmake_print_variables(
       RW_ROOT
       RWSTUDIO_ROOT
@@ -93,13 +93,13 @@ ELSE()
 	QT4_WRAP_UI(UIS_OUT_H ${UIS_FILES})
 ENDIF()
 #Need to add the current binary dir to the include directory because the generated source files are placed here
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
+include_directories(${CMAKE_CURRENT_BINARY_DIR} ${ROOT}/include)
 
 # MOC
 IF(RWS_USE_QT5)
-	QT5_WRAP_CPP(MocSrcFiles SamplePlugin.hpp)
+	QT5_WRAP_CPP(MocSrcFiles ${ROOT}/include/SamplePlugin.hpp)
 ELSE()
-	QT4_WRAP_CPP(MocSrcFiles SamplePlugin.hpp OPTIONS -DBOOST_TT_HAS_PLUS_HPP_INCLUDED -DBOOST_TT_HAS_PLUS_ASSIGN_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_ASSIGN_HPP_INCLUDED)
+	QT4_WRAP_CPP(MocSrcFiles ${ROOT}/include/SamplePlugin.hpp OPTIONS -DBOOST_TT_HAS_PLUS_HPP_INCLUDED -DBOOST_TT_HAS_PLUS_ASSIGN_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_ASSIGN_HPP_INCLUDED)
 ENDIF()
 
 # Rcc the files:
@@ -110,7 +110,7 @@ ELSE()
 ENDIF()
 
 # Add the source files to build
-SET(SrcFiles SamplePlugin.cpp ${UIS_OUT_H})
+SET(SrcFiles ${ROOT}/src/SamplePlugin.cpp ${UIS_OUT_H})
 
 # The shared library to build:
 ADD_LIBRARY(SamplePlugin MODULE ${SrcFiles} ${MocSrcFiles}  ${RccSrcFiles})

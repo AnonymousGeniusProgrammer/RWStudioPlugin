@@ -2,3 +2,7 @@
 resources/
 build/
 libs/
+*.code-workspace
+rwsettings.xml
+
+data/Geometry/*

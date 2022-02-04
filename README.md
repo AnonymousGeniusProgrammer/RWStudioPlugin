@@ -11,7 +11,3 @@ The output will be a dynamically linkable file (win32 its .dll and linux its .so
     SamplePlugin\Filename=libSamplePlugin
     SamplePlugin\Path=c:/workspace/RobWorkSudio/example/pluginUIapp/libs/release
     SamplePlugin\Visible=true
-
-how to build the example:
-
-Building win64 with MSVC++2017:

@@ -4,6 +4,7 @@
 #include <rw/models/TreeDevice.hpp>
 #include <rw/models/PrismaticJoint.hpp>
 #include <rw/kinematics/FixedFrame.hpp>
+#include <rw/models/CompositeDevice.hpp>
 #include <boost/bind.hpp>
 
 using rw::kinematics::State;
@@ -48,6 +49,7 @@ void SamplePlugin::btnPressed()
     else if (obj == _btn1)
     {
         log().info() << "Button 1\n";
+        this->jogDeviceManualy();
     }
     else if (obj == _spinBox)
     {
@@ -125,6 +127,23 @@ void SamplePlugin::addPrisJoint(const std::string& frame, const rw::math::Transf
     workcell->addFrame(pris_jnt, parent);
     defState = workcell->getStateStructure()->upgradeState(defState);
     getRobWorkStudio()->setState(defState);
+}
+
+void SamplePlugin::jogDeviceManualy()
+{
+    rw::models::Device::Ptr pDev = getRobWorkStudio()->getWorkCell()->findDevice("Device");
+    rw::kinematics::State state = getRobWorkStudio()->getWorkCell()->getDefaultState();
+    rw::math::Q config = pDev->getQ(state);
+    log().info() << "Current config: " << config << '\n';
+    std::vector<double> vecConfig = config.toStdVector();
+    std::for_each(vecConfig.begin(), vecConfig.end(), [](double &q){q++;});
+    config = vecConfig;
+    log().info() << "Updated config: " << config << '\n';
+    pDev->setQ(config, state);
+    log().info() << "Config get from device: " << pDev->getQ(state) << '\n';
+    log().info() << "Update state manually " << '\n';
+    getRobWorkStudio()->setState(state);
+    
 }
 
 #if !RWS_USE_QT5

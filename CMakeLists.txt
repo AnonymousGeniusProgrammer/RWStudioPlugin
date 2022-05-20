@@ -84,34 +84,22 @@ ELSE()
 	SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${ROOT}/libs/${CMAKE_BUILD_TYPE}" CACHE PATH "Archive directory" FORCE)
 ENDIF()
 
-# if we want to use ui files add them here
-SET(UIS_FILES SamplePlugin.ui )
-
-IF(RWS_USE_QT5)
-	QT5_WRAP_UI(UIS_OUT_H ${UIS_FILES})
-ELSE()
-	QT4_WRAP_UI(UIS_OUT_H ${UIS_FILES})
-ENDIF()
-#Need to add the current binary dir to the include directory because the generated source files are placed here
-include_directories(${CMAKE_CURRENT_BINARY_DIR} ${ROOT}/include)
-
-# MOC
-IF(RWS_USE_QT5)
-	QT5_WRAP_CPP(MocSrcFiles ${ROOT}/include/SamplePlugin.hpp)
-ELSE()
-	QT4_WRAP_CPP(MocSrcFiles ${ROOT}/include/SamplePlugin.hpp OPTIONS -DBOOST_TT_HAS_PLUS_HPP_INCLUDED -DBOOST_TT_HAS_PLUS_ASSIGN_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_HPP_INCLUDED -DBOOST_TT_HAS_MINUS_ASSIGN_HPP_INCLUDED)
-ENDIF()
-
-# Rcc the files:
-IF(RWS_USE_QT5)
-	QT5_ADD_RESOURCES(RccSrcFiles resources.qrc)
-ELSE()
-	QT4_ADD_RESOURCES(RccSrcFiles resources.qrc)
-ENDIF()
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 # Add the source files to build
-SET(SrcFiles ${ROOT}/src/SamplePlugin.cpp ${UIS_OUT_H})
+set(SrcFiles SamplePlugin.cpp resources.qrc)
 
 # The shared library to build:
-ADD_LIBRARY(SamplePlugin MODULE ${SrcFiles} ${MocSrcFiles}  ${RccSrcFiles})
-TARGET_LINK_LIBRARIES(SamplePlugin ${ROBWORKSTUDIO_LIBRARIES} ${ROBWORK_LIBRARIES})
+add_library(SamplePlugin MODULE ${SrcFiles})
+target_link_libraries(SamplePlugin PUBLIC ${ROBWORKSTUDIO_LIBRARIES} ${ROBWORK_LIBRARIES})
+target_include_directories(SamplePlugin PUBLIC ${ROBWORKSTUDIO_INCLUDE_DIRS} ${ROBWORK_INCLUDE_DIRS} )
+
+if(CMAKE_VERSION VERSION_LESS 3.9)
+    # Required in CMake < 3.9 to find generated ui_SamplePlugin.h file 
+    target_include_directories(SamplePlugin PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
+endif()
+
+message("-- " ${PROJECT_NAME} " done!")
+

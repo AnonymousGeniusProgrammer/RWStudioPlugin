@@ -4,5 +4,5 @@ build/
 libs/
 *.code-workspace
 rwsettings.xml
-
+CMakePresets.json
 data/Geometry/*
